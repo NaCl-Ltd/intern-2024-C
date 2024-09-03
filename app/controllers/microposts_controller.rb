@@ -1,6 +1,6 @@
 class MicropostsController < ApplicationController
-  before_action :logged_in_user, only: %i[create destroy pin]
-  before_action :correct_user, only: %i[destroy pin]
+  before_action :logged_in_user, only: %i[create destroy toggle_pinned]
+  before_action :correct_user, only: %i[destroy toggle_pinned]
 
   def create
     @micropost = current_user.microposts.build(micropost_params)
@@ -24,8 +24,8 @@ class MicropostsController < ApplicationController
     end
   end
 
-  def pin
-    @micropost.update!(pinned: true)
+  def toggle_pinned
+    @micropost.toggle(:pinned).save!
     redirect_to root_path, status: :see_other
   end
 

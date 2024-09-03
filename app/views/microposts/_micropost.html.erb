@@ -12,7 +12,9 @@
     <% if current_user?(micropost.user) %>
       <%= link_to "delete", micropost, data: { "turbo-method": :delete,
                                                turbo_confirm: "You sure?" } %> |
-      <%= link_to 'pin', pin_micropost_path(micropost), data: { turbo_method: :patch } %>
+      <%= link_to micropost.pinned? ? 'unpin' : 'pin',
+                  toggle_pinned_micropost_path(micropost),
+                  data: { turbo_method: :patch } %>
     <% end %>
   </span>
 </li>
