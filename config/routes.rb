@@ -19,7 +19,7 @@ Rails.application.routes.draw do
 
   resources :microposts, only: %i[create destroy] do
     member do
-      patch :pin
+      patch :toggle_pinned
     end
   end
 
