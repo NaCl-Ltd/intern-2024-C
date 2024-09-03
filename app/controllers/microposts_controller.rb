@@ -1,6 +1,6 @@
 class MicropostsController < ApplicationController
-  before_action :logged_in_user, only: [:create, :destroy]
-  before_action :correct_user,   only: :destroy
+  before_action :logged_in_user, only: %i[create destroy pin]
+  before_action :correct_user, only: %i[destroy pin]
 
   def create
     @micropost = current_user.microposts.build(micropost_params)
@@ -22,6 +22,11 @@ class MicropostsController < ApplicationController
     else
       redirect_to request.referrer, status: :see_other
     end
+  end
+
+  def pin
+    @micropost.update!(pinned: true)
+    redirect_to root_path, status: :see_other
   end
 
   private

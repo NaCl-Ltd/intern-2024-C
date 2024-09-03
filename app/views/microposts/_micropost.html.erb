@@ -11,7 +11,8 @@
     Posted <%= time_ago_in_words(micropost.created_at) %> ago.
     <% if current_user?(micropost.user) %>
       <%= link_to "delete", micropost, data: { "turbo-method": :delete,
-                                               turbo_confirm: "You sure?" } %>
+                                               turbo_confirm: "You sure?" } %> |
+      <%= link_to 'pin', pin_micropost_path(micropost), data: { turbo_method: :patch } %>
     <% end %>
   </span>
 </li>
