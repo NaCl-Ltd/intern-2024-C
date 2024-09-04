@@ -31,6 +31,13 @@ class User < ApplicationRecord
     SecureRandom.urlsafe_base64
   end
 
+  def self.search_by(query)
+    return all if query.blank?
+
+    q = "%#{query}%"
+    where('name LIKE ?', q).or(where('email LIKE ?', q))
+  end
+
   # 永続セッションのためにユーザーをデータベースに記憶する
   def remember
     self.remember_token = User.new_token
