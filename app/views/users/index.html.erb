@@ -1,15 +1,17 @@
 <% provide(:title, 'All users') %>
 <h1>All users</h1>
 
-<%= will_paginate %>
-
 <%= form_with url: users_path, method: :get do |f| %>
   <%= f.text_field :search_query %>
   <%= f.submit 'Search' %>
 <% end %>
 
-<ul class="users">
-  <%= render @users %>
-</ul>
-
-<%= will_paginate %>
+<% if @users.any? %>
+  <%= will_paginate %>
+  <ul class='users'>
+    <%= render @users %>
+  </ul>
+  <%= will_paginate %>
+<% else %>
+  <p>No users found.</p>
+<% end %>
