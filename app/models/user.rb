@@ -35,7 +35,7 @@ class User < ApplicationRecord
   def self.search_by(query)
     return all if query.blank?
 
-    q = "%#{query}%"
+    q = "%#{sanitize_sql_like(query)}%"
     where('name LIKE ?', q).or(where('email LIKE ?', q))
   end
 
