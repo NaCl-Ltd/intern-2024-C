@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :users do
     member do
       get :following, :followers
+      get 'show_all'
     end
   end
   resources :account_activations, only: [:edit]
@@ -22,6 +23,8 @@ Rails.application.routes.draw do
       patch :toggle_pinned
     end
   end
+
+  resources :microposts, only: [:index]
 
   resources :relationships,       only: [:create, :destroy]
   get '/microposts', to: 'static_pages#home'

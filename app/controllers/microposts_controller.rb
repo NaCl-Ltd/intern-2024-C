@@ -9,7 +9,7 @@ class MicropostsController < ApplicationController
       flash[:success] = "Micropost created!"
       redirect_to root_url
     else
-      @feed_items = current_user.feed.paginate(page: params[:page])
+      @feed_items = current_user.feed.order(created_at: :desc).limit(10) # 修正
       render 'static_pages/home', status: :unprocessable_entity
     end
   end
@@ -17,16 +17,16 @@ class MicropostsController < ApplicationController
   def destroy
     @micropost.destroy
     flash[:success] = "Micropost deleted"
-    if request.referrer.nil?
-      redirect_to root_url, status: :see_other
-    else
-      redirect_to request.referrer, status: :see_other
-    end
+    redirect_back_or_root
   end
 
   def toggle_pinned
     @micropost.toggle(:pinned).save!
     redirect_to root_path, status: :see_other
+  end
+
+  def index
+    @microposts = Micropost.order(created_at: :desc)
   end
 
   private
@@ -38,5 +38,13 @@ class MicropostsController < ApplicationController
     def correct_user
       @micropost = current_user.microposts.find_by(id: params[:id])
       redirect_to root_url, status: :see_other if @micropost.nil?
+    end
+
+    def redirect_back_or_root
+      if request.referrer.nil?
+        redirect_to root_url, status: :see_other
+      else
+        redirect_to request.referrer, status: :see_other
+      end
     end
 end

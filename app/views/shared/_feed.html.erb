@@ -2,6 +2,7 @@
   <ol class="microposts">
     <%= render @feed_items %>
   </ol>
-  <%= will_paginate @feed_items,
-                    params: { controller: :static_pages, action: :home } %>
-<% end %>s
+  <%= link_to 'Show All', microposts_path, class: 'btn btn-primary' %>
+<% else %>
+  <p>No microposts available.</p>
+<% end %>
