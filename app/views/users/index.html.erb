@@ -3,15 +3,11 @@
 
 <%= form_with url: users_path, method: :get do |f| %>
   <%= f.text_field :search_query %>
-  <%= f.submit 'Search' %>
-<% end %>
-
-<%= form_with url: users_path, method: :get do |f| %>
   <%= f.select :birthplaces,
                User.birthplaces.map { |k, v| [k.capitalize, v] },
                {},
                { multiple: true, size: 10 } %>
-  <%= f.submit 'Filter' %>
+  <%= f.submit 'Search' %>
 <% end %>
 
 <% if @users.any? %>
