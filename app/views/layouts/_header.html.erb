@@ -15,6 +15,13 @@
       <ul id="navbar-menu"
           class="nav navbar-nav navbar-right">
         <li><%= link_to "Home", root_path %></li>
+
+        <% if logged_in? %>
+          <li>
+            <%= link_to 'News', news_user_path(current_user) %>
+          </li>
+        <% end %>
+
         <li><%= link_to "Help", help_path %></li>
         <% if logged_in? %>
           <li><%= link_to "Users", users_path %></li>

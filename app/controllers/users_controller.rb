@@ -1,8 +1,7 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:index, :edit, :update, :destroy,
-                                        :following, :followers]
-  before_action :correct_user,   only: [:edit, :update]
-  before_action :admin_user,     only: :destroy
+  before_action :logged_in_user, only: %i[index edit update destroy following followers news]
+  before_action :correct_user, only: %i[edit update news]
+  before_action :admin_user, only: :destroy
 
   def index
     @users = User.search_by(params[:search_query]).paginate(page: params[:page])
@@ -58,6 +57,13 @@ class UsersController < ApplicationController
     @user  = User.find(params[:id])
     @users = @user.followers.paginate(page: params[:page])
     render 'show_follow', status: :unprocessable_entity
+  end
+
+  def news
+    @microposts = Micropost.includes(:user, image_attachment: :blob)
+                           .where(user_id: @user.following_ids, created_at: 48.hours.ago..)
+                           .reorder('created_at DESC')
+                           .limit(Settings.news.count)
   end
 
   private
