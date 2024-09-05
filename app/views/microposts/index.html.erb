@@ -1,6 +1,6 @@
-<% if @microposts.any? %>
+<% if @feed_items.any? %>
   <ol class="microposts">
-    <%= render @microposts %>
+    <%= render @feed_items %>
   </ol>
 <% else %>
   <p>No microposts available.</p>

@@ -9,7 +9,7 @@ class MicropostsController < ApplicationController
       flash[:success] = "Micropost created!"
       redirect_to root_url
     else
-      @feed_items = current_user.feed.order(created_at: :desc).limit(10) # 修正
+      @feed_items = current_user.feed.order(created_at: :desc).limit(10) 
       render 'static_pages/home', status: :unprocessable_entity
     end
   end
@@ -26,7 +26,8 @@ class MicropostsController < ApplicationController
   end
 
   def index
-    @microposts = Micropost.order(created_at: :desc)
+    @micropost  = current_user.microposts.build
+    @feed_items = current_user.feed.order(created_at: :desc)
   end
 
   private
