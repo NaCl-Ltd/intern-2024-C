@@ -1,13 +1,11 @@
 <% provide(:title, @user.name) %>
-h1{
-  background-color: "#EEEEEE";
-}
 <div class="row">
   <aside class="col-md-4">
     <section>
       <h1>
         <%= gravatar_for @user %>
-        <%= @user.name %>
+        <strong><%= @user.name %></strong>
+        <p><%= @user.introduction %></p> 
       </h1>
     </section>
     <section class="stats">
