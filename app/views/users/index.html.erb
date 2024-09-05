@@ -6,6 +6,14 @@
   <%= f.submit 'Search' %>
 <% end %>
 
+<%= form_with url: users_path, method: :get do |f| %>
+  <%= f.select :birthplaces,
+               User.birthplaces.map { |k, v| [k.capitalize, v] },
+               { include_blank: true },
+               { multiple: true, size: 10 } %>
+  <%= f.submit 'Filter' %>
+<% end %>
+
 <% if @users.any? %>
   <%= will_paginate %>
   <ul class='users'>

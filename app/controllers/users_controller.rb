@@ -4,7 +4,13 @@ class UsersController < ApplicationController
   before_action :admin_user, only: :destroy
 
   def index
-    @users = User.search_by(params[:search_query]).paginate(page: params[:page])
+    users = User.search_by(params[:search_query])
+
+    unless (b = params[:birthplaces]) && (b = b.excluding('')).empty?
+      users = users.where(birthplace: b)
+    end
+
+    @users = users.paginate(page: params[:page])
   end
 
   def show
