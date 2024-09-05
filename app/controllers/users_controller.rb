@@ -6,11 +6,13 @@ class UsersController < ApplicationController
   def index
     users = User.search_by(params[:search_query])
 
-    unless (b = params[:birthplaces]) && (b = b.excluding('')).empty?
-      users = users.where(birthplace: b)
-    end
+    b = params[:birthplaces]
+    return @users = users.paginate(page: params[:page]) if b.nil?
 
-    @users = users.paginate(page: params[:page])
+    b = b.excluding('')
+    return @users = users.paginate(page: params[:page]) if b.empty?
+
+    @users = users.where(birthplace: b).paginate(page: params[:page])
   end
 
   def show
