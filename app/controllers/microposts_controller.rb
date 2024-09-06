@@ -1,5 +1,5 @@
 class MicropostsController < ApplicationController
-  before_action :logged_in_user, only: %i[create destroy news toggle_pinned]
+  before_action :require_user
   before_action :correct_user, only: %i[destroy toggle_pinned]
 
   def create
