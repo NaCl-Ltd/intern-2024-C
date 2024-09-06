@@ -13,7 +13,7 @@
 <% if @users.any? %>
   <%= will_paginate %>
   <ul class='users'>
-    <%= render @users %>
+    <%= render @users , user: @user, show_address: false%>
   </ul>
   <%= will_paginate %>
 <% else %>
