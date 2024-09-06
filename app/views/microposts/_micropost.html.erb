@@ -3,8 +3,10 @@
   <span class="user"><%= link_to micropost.user.name, micropost.user %></span>
   <span class="content">
     <%= micropost.content %>
-    <% if micropost.image.attached? %>
-      <%= image_tag micropost.image %>
+    <% if micropost.images.attached? %>
+      <% micropost.images.each do |image| %>
+        <%= image_tag image.variant(:display) %>
+      <% end %>
     <% end %>
   </span>
   <span class="timestamp">
