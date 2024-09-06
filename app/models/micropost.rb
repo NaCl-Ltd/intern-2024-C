@@ -20,6 +20,8 @@ class Micropost < ApplicationRecord
   private
 
   def ensure_single_pinned_post
+    update!(pinned: false) if discarded?
+
     user.microposts.where(pinned: true).where.not(id: id).update_all(pinned: false)
   end
 end
