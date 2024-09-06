@@ -1,6 +1,6 @@
 class MicropostsController < ApplicationController
   before_action :require_user
-  before_action :correct_user, only: %i[destroy toggle_pinned]
+  before_action :set_micropost, :require_author, only: %i[destroy toggle_pinned]
 
   def create
     @micropost = current_user.microposts.build(micropost_params)
@@ -38,12 +38,17 @@ class MicropostsController < ApplicationController
 
   private
 
-    def micropost_params
-      params.require(:micropost).permit(:content, :image)
-    end
+  def micropost_params
+    params.require(:micropost).permit(:content, :image)
+  end
 
-    def correct_user
-      @micropost = current_user.microposts.find_by(id: params[:id])
-      redirect_to root_url, status: :see_other if @micropost.nil?
-    end
+  def set_micropost
+    @micropost = Micropost.find(params[:id])
+  end
+
+  def require_author
+    return if @micropost.user == current_user
+
+    redirect_to root_path, status: :see_other, flash: { danger: 'Unauthorized' }
+  end
 end
