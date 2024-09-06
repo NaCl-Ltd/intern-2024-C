@@ -18,7 +18,8 @@ class User < ApplicationRecord
                     uniqueness: true
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
-
+  validates :introduction, length: { maximum: 50 }
+  
   # 渡された文字列のハッシュ値を返す
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
@@ -34,7 +35,7 @@ class User < ApplicationRecord
   def self.search_by(query)
     return all if query.blank?
 
-    q = "%#{query}%"
+    q = "%#{sanitize_sql_like(query)}%"
     where('name LIKE ?', q).or(where('email LIKE ?', q))
   end
 

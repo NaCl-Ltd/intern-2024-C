@@ -4,7 +4,12 @@ class UsersController < ApplicationController
   before_action :admin_user, only: :destroy
 
   def index
-    @users = User.search_by(params[:search_query]).paginate(page: params[:page])
+    users = User.search_by(params[:search_query])
+
+    b = params[:birthplaces]&.excluding('')
+    users = users.where(birthplace: b) if b.present?
+
+    @users = users.paginate(page: params[:page])
   end
 
   def show
@@ -62,8 +67,9 @@ class UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:name, :email, :password,
-                                   :password_confirmation)
+      params.require(:user).permit(
+        :name, :email, :birthplace, :introduction, :password, :password_confirmation
+      )
     end
 
     # beforeフィルタ
