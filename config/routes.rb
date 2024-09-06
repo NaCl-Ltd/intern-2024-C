@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
   resources :microposts, only: %i[create update destroy] do
     collection do
-      get :news
+      get :news, :trash
     end
 
     member do

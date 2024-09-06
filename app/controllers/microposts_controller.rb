@@ -31,6 +31,12 @@ class MicropostsController < ApplicationController
                            .limit(Settings.news.count)
   end
 
+  def trash
+    @microposts = Micropost.includes(:user, image_attachment: :blob)
+                           .discarded
+                           .paginate(page: params[:page])
+  end
+
   def toggle_pinned
     @micropost.toggle(:pinned).save!
     redirect_to root_path, status: :see_other
