@@ -1,6 +1,6 @@
 class MicropostsController < ApplicationController
   before_action :require_user
-  before_action :set_micropost, :require_author, only: %i[destroy toggle_pinned]
+  before_action :set_micropost, :require_author, only: %i[update destroy toggle_pinned]
 
   def create
     @micropost = current_user.microposts.build(micropost_params)
@@ -14,14 +14,14 @@ class MicropostsController < ApplicationController
     end
   end
 
+  def update
+    @micropost.undiscard
+    redirect_back_or_to root_path, flash: { success: 'Micropost restored' }
+  end
+
   def destroy
-    @micropost.destroy
-    flash[:success] = "Micropost deleted"
-    if request.referrer.nil?
-      redirect_to root_url, status: :see_other
-    else
-      redirect_to request.referrer, status: :see_other
-    end
+    @micropost.discard || @micropost.destroy!
+    redirect_back_or_to root_path, status: :see_other, flash: { success: 'Micropost deleted' }
   end
 
   def news
