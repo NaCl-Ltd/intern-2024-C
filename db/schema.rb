@@ -72,6 +72,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_05_012500) do
     t.datetime "activated_at"
     t.string "reset_digest"
     t.datetime "reset_sent_at"
+    t.string "birthplace"
     t.string "introduction", default: ""
     t.index ["email"], name: "index_users_on_email", unique: true
   end
