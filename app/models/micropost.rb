@@ -1,4 +1,6 @@
 class Micropost < ApplicationRecord
+  include Discard::Model
+
   belongs_to :user
   has_one_attached :image do |attachable|
     attachable.variant :display, resize_to_limit: [200, 200]
