@@ -26,6 +26,7 @@ class MicropostsController < ApplicationController
 
   def news
     @microposts = Micropost.includes(:user, image_attachment: :blob)
+                           .kept
                            .where(user_id: current_user.following_ids, created_at: 48.hours.ago..)
                            .reorder('created_at DESC')
                            .limit(Settings.news.count)
