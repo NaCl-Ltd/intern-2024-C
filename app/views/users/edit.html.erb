@@ -12,6 +12,11 @@
       <%= f.label :email %>
       <%= f.email_field :email, class: 'form-control' %>
 
+      <%= f.label :birthplace %>
+      <%= f.select :birthplace,
+                   BIRTHPLACES.map { |p| [p.capitalize, p] },
+                   include_blank: true %>
+
       <%= f.label :password %>
       <%= f.password_field :password, class: 'form-control' %>
 

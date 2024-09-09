@@ -35,7 +35,7 @@ class User < ApplicationRecord
   def self.search_by(query)
     return all if query.blank?
 
-    q = "%#{query}%"
+    q = "%#{sanitize_sql_like(query)}%"
     where('name LIKE ?', q).or(where('email LIKE ?', q))
   end
 
@@ -94,11 +94,9 @@ class User < ApplicationRecord
 
   # ユーザーのステータスフィードを返す
   def feed
-    following_ids = "SELECT followed_id FROM relationships
-                     WHERE  follower_id = :user_id"
-    Micropost.where("user_id IN (#{following_ids})
-                     OR user_id = :user_id", user_id: id)
-             .includes(:user, image_attachment: :blob)
+    Micropost.includes(:user, image_attachment: :blob)
+             .kept
+             .where(user_id: [*following_ids, id])
   end
 
   # ユーザーをフォローする

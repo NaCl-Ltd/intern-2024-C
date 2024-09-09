@@ -1,9 +1,16 @@
 <li>
   <%= gravatar_for user, size: 50 %>
   <%= link_to user.name, user %>
+  <%= "from #{user.birthplace.capitalize}" if user.birthplace %>
   <% if current_user.admin? && !current_user?(user) %>
     | <%= link_to "delete", user, data: { "turbo-method": :delete,
                                           turbo_confirm: "You sure?" } %>
   <% end %>
   <p><%= user.introduction %></p> 
+  <% if show_address %>
+  <%= user.following.count %>
+  フォロー
+  <%= user.followers.count %>
+  フォロワー
+  <% end %>
 </li>

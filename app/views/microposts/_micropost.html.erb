@@ -10,14 +10,18 @@
   <span class="timestamp">
     Posted <%= time_ago_in_words(micropost.created_at) %> ago.
     <% if current_user?(micropost.user) || current_user.admin? %>
-      <%= link_to "delete", micropost, data: { "turbo-method": :delete,
-                                               turbo_confirm: "You sure?" } %>
-    <% end %>
-    <% if current_user?(micropost.user) %>
-      |
-      <%= link_to micropost.pinned? ? 'unpin' : 'pin',
-                  toggle_pinned_micropost_path(micropost),
-                  data: { turbo_method: :patch } %>
+      <% if (trash_action = action_name == 'trash') %>
+        <%= link_to 'restore', micropost, data: { turbo_method: :patch } %>
+      <% end %>
+      <%= link_to 'delete', micropost, data: {
+           turbo_method: :delete,
+           turbo_confirm: 'Are you sure you want to delete this post?'
+      } %>
+      <% unless trash_action %>
+        <%= link_to micropost.pinned? ? 'unpin' : 'pin',
+                    toggle_pinned_micropost_path(micropost),
+                    data: { turbo_method: :patch } %>
+      <% end %>
     <% end %>
   </span>
 </li>

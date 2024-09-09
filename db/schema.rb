@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_09_05_012500) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_06_013141) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -45,6 +45,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_05_012500) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "pinned", default: false, null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_microposts_on_discarded_at"
     t.index ["user_id", "created_at"], name: "index_microposts_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_microposts_on_user_id"
   end
@@ -72,6 +74,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_05_012500) do
     t.datetime "activated_at"
     t.string "reset_digest"
     t.datetime "reset_sent_at"
+    t.string "birthplace"
     t.string "introduction", default: ""
     t.index ["email"], name: "index_users_on_email", unique: true
   end
