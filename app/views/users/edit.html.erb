@@ -12,11 +12,19 @@
       <%= f.label :email %>
       <%= f.email_field :email, class: 'form-control' %>
 
+      <%= f.label :birthplace %>
+      <%= f.select :birthplace,
+                   BIRTHPLACES.map { |p| [p.capitalize, p] },
+                   include_blank: true %>
+
       <%= f.label :password %>
       <%= f.password_field :password, class: 'form-control' %>
 
       <%= f.label :password_confirmation, "Confirmation" %>
       <%= f.password_field :password_confirmation, class: 'form-control' %>
+
+      <%= f.label :introduction %>
+      <%= f.text_area :introduction, class: 'form-control' %>
 
       <%= f.submit "Save changes", class: "btn btn-primary" %>
     <% end %>

@@ -3,13 +3,17 @@
 
 <%= form_with url: users_path, method: :get do |f| %>
   <%= f.text_field :search_query %>
+  <%= f.select :birthplaces,
+               BIRTHPLACES.map { |p| [p.capitalize, p] },
+               {},
+               { multiple: true, size: 10 } %>
   <%= f.submit 'Search' %>
 <% end %>
 
 <% if @users.any? %>
   <%= will_paginate %>
   <ul class='users'>
-    <%= render @users %>
+    <%= render @users , user: @user, show_address: false%>
   </ul>
   <%= will_paginate %>
 <% else %>
