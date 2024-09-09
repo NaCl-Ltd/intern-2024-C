@@ -1,4 +1,6 @@
 class Micropost < ApplicationRecord
+  include Discard::Model
+
   belongs_to :user
   has_many_attached :images do |attachable|
     attachable.variant :display, resize_to_limit: [200, 200]
@@ -25,6 +27,8 @@ class Micropost < ApplicationRecord
   end
 
   def ensure_single_pinned_post
+    update!(pinned: false) if discarded?
+
     user.microposts.where(pinned: true).where.not(id: id).update_all(pinned: false)
   end
 end
