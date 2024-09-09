@@ -1,6 +1,6 @@
 class MicropostsController < ApplicationController
-  before_action :logged_in_user, only: %i[create destroy toggle_pinned]
-  before_action :correct_user, only: %i[destroy toggle_pinned]
+  before_action :require_user
+  before_action :set_micropost, :require_author, only: %i[update destroy toggle_pinned]
 
   def create
     @micropost = current_user.microposts.build(micropost_params)
@@ -14,14 +14,28 @@ class MicropostsController < ApplicationController
     end
   end
 
+  def update
+    @micropost.undiscard
+    redirect_back_or_to root_path, flash: { success: 'Micropost restored' }
+  end
+
   def destroy
-    @micropost.destroy
-    flash[:success] = "Micropost deleted"
-    if request.referrer.nil?
-      redirect_to root_url, status: :see_other
-    else
-      redirect_to request.referrer, status: :see_other
-    end
+    @micropost.discard || @micropost.destroy!
+    redirect_back_or_to root_path, status: :see_other, flash: { success: 'Micropost deleted' }
+  end
+
+  def news
+    @microposts = Micropost.includes(:user, image_attachment: :blob)
+                           .kept
+                           .where(user_id: current_user.following_ids, created_at: 48.hours.ago..)
+                           .reorder('created_at DESC')
+                           .limit(Settings.news.count)
+  end
+
+  def trash
+    @microposts = Micropost.includes(:user, image_attachment: :blob)
+                           .discarded
+                           .paginate(page: params[:page])
   end
 
   def toggle_pinned
@@ -31,12 +45,17 @@ class MicropostsController < ApplicationController
 
   private
 
-    def micropost_params
-      params.require(:micropost).permit(:content, :image)
-    end
+  def micropost_params
+    params.require(:micropost).permit(:content, :image)
+  end
 
-    def correct_user
-      @micropost = current_user.microposts.find_by(id: params[:id])
-      redirect_to root_url, status: :see_other if @micropost.nil?
-    end
+  def set_micropost
+    @micropost = Micropost.find(params[:id])
+  end
+
+  def require_author
+    return if @micropost.user == current_user
+
+    redirect_to root_path, status: :see_other, flash: { danger: 'Unauthorized' }
+  end
 end

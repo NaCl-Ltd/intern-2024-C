@@ -8,12 +8,10 @@ class ApplicationController < ActionController::Base
 
   private
 
-    # ユーザーのログインを確認する
-    def logged_in_user
-      unless logged_in?
-        store_location
-        flash[:danger] = "Please log in."
-        redirect_to login_url, status: :see_other
-      end
-    end
+  def require_user
+    return if logged_in?
+
+    store_location
+    redirect_to login_path, flash: { danger: 'Login required' }
+  end
 end
