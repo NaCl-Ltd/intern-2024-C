@@ -4,7 +4,7 @@ class MicropostsController < ApplicationController
 
   def create
     @micropost = current_user.microposts.build(micropost_params)
-    @micropost.images.attach(params[:micropost][images:[]])
+    @micropost.images.attach(params[:micropost][:images])
     if @micropost.save
       flash[:success] = "Micropost created!"
       redirect_to root_url
@@ -39,7 +39,7 @@ class MicropostsController < ApplicationController
   private
 
     def micropost_params
-      params.require(:micropost).permit(:content, images: [])
+      params.require(:micropost).permit(:content, :images)
     end
 
     def correct_user
