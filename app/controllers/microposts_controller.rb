@@ -80,7 +80,7 @@ class MicropostsController < ApplicationController
   end
 
   def require_author
-    return if @micropost.user == current_user
+    return if @micropost.user == current_user || current_user.admin?
 
     redirect_to root_path, status: :see_other, flash: { danger: 'Unauthorized' }
   end
