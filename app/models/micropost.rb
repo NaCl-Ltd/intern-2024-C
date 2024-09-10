@@ -6,6 +6,8 @@ class Micropost < ApplicationRecord
     attachable.variant :display, resize_to_limit: [200, 200]
   end
 
+  has_many :likes, as: :likeable, dependent: :destroy
+
   default_scope -> { order(pinned: :desc, created_at: :desc) }
 
   validates :user_id, presence: true
