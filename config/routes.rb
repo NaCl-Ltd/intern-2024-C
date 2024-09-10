@@ -26,6 +26,8 @@ Rails.application.routes.draw do
 
     member do
       patch :toggle_pinned
+      post :like
+      delete :unlike
     end
   end
 

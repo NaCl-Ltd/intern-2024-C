@@ -1,6 +1,7 @@
 class MicropostsController < ApplicationController
   before_action :require_user
-  before_action :set_micropost, :require_author, only: %i[update destroy toggle_pinned]
+  before_action :set_micropost, only: %i[update destroy toggle_pinned like unlike]
+  before_action :require_author, only: %i[update destroy toggle_pinned]
 
   def create
     @micropost = current_user.microposts.build(micropost_params)
@@ -41,6 +42,24 @@ class MicropostsController < ApplicationController
   def toggle_pinned
     @micropost.toggle(:pinned).save!
     redirect_to root_path, status: :see_other
+  end
+
+  def like
+    current_user.likes.create!(likeable: @micropost)
+    render turbo_stream: turbo_stream.replace(
+      @micropost,
+      partial: 'microposts/like_btn',
+      locals: { micropost: @micropost }
+    )
+  end
+
+  def unlike
+    current_user.likes.find_by(likeable: @micropost).destroy!
+    render turbo_stream: turbo_stream.replace(
+      @micropost,
+      partial: 'microposts/like_btn',
+      locals: { micropost: @micropost }
+    )
   end
 
   private
