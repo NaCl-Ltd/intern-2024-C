@@ -39,6 +39,13 @@ class MicropostsController < ApplicationController
                            .paginate(page: params[:page])
   end
 
+  def likes
+    @microposts = Micropost.includes(:user, image_attachment: :blob)
+                           .kept
+                           .where(id: current_user.likes.pluck(:likeable_id))
+                           .paginate(page: params[:page])
+  end
+
   def toggle_pinned
     @micropost.toggle(:pinned).save!
     redirect_to root_path, status: :see_other
