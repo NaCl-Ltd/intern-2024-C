@@ -56,7 +56,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_09_022225) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "pinned", default: false, null: false
+    t.datetime "discarded_at"
     t.integer "likes_count", default: 0, null: false
+    t.index ["discarded_at"], name: "index_microposts_on_discarded_at"
     t.index ["user_id", "created_at"], name: "index_microposts_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_microposts_on_user_id"
   end

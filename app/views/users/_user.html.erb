@@ -7,4 +7,10 @@
                                           turbo_confirm: "You sure?" } %>
   <% end %>
   <p><%= user.introduction %></p> 
+  <% if show_address %>
+  <%= user.following.count %>
+  フォロー
+  <%= user.followers.count %>
+  フォロワー
+  <% end %>
 </li>
