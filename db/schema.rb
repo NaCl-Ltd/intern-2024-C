@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_09_11_070211) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_11_072724) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -61,6 +61,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_11_070211) do
     t.index ["discarded_at"], name: "index_microposts_on_discarded_at"
     t.index ["user_id", "created_at"], name: "index_microposts_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_microposts_on_user_id"
+  end
+
+  create_table "microposts_tags", id: false, force: :cascade do |t|
+    t.integer "micropost_id"
+    t.integer "tag_id"
+    t.index ["micropost_id"], name: "index_microposts_tags_on_micropost_id"
+    t.index ["tag_id"], name: "index_microposts_tags_on_tag_id"
   end
 
   create_table "relationships", force: :cascade do |t|
