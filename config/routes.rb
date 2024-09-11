@@ -12,20 +12,22 @@ Rails.application.routes.draw do
 
   resources :users do
     member do
-      get :following, :followers
+      get :following, :followers, :show_all
     end
   end
 
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
 
-  resources :microposts, only: %i[show create destroy] do
+  resources :microposts, only: %i[index show create update destroy] do
     collection do
-      get :news
+      get :news, :trash, :likes
     end
 
     member do
       patch :toggle_pinned
+      post :like
+      delete :unlike
     end
   end
 
