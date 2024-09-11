@@ -1,25 +1,22 @@
 class ApplicationController < ActionController::Base
+  include SessionsHelper
+
   before_action :set_locale
 
   def default_url_options
     { locale: I18n.locale }
   end
 
-  
-  include SessionsHelper
-
   private
 
-    def set_locale
-      I18n.locale = params[:locale] || I18n.default_locale
-    end
+  def require_user
+    return if logged_in?
 
-    # ユーザーのログインを確認する
-    def logged_in_user
-      unless logged_in?
-        store_location
-        flash[:danger] = "Please log in."
-        redirect_to login_url, status: :see_other
-      end
-    end
+    store_location
+    redirect_to login_path, status: :see_other, flash: { danger: 'Login required' }
+  end
+
+  def set_locale
+    I18n.locale = params[:locale] || I18n.default_locale
+  end
 end
