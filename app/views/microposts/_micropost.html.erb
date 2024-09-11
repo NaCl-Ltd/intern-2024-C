@@ -1,7 +1,10 @@
-<li id="micropost-<%= micropost.id %>">
+<li id='micropost-<%= micropost.id %>'>
   <%= link_to gravatar_for(micropost.user, size: 50), micropost.user %>
-  <span class="user"><%= link_to micropost.user.name, micropost.user %></span>
-  <span class="content">
+  <span class='user'>
+    <%= link_to micropost.user.name, micropost.user %>
+  </span>
+
+  <span class='content'>
     <%= raw Rinku.auto_link(micropost.content) %>
     <% if micropost.images.attached? %>
       <% micropost.images.each do |image| %>
@@ -9,17 +12,20 @@
       <% end %>
     <% end %>
   </span>
-  <span class="timestamp">
+
+  <span class='timestamp'>
     Posted <%= time_ago_in_words(micropost.created_at) %> ago.
-    <% if current_user?(micropost.user) %>
-      <% if (trash_action = action_name == 'trash') %>
-        <%= link_to 'restore', micropost, data: { turbo_method: :patch } %>
-      <% end %>
+    <%= render 'microposts/like_btn', micropost: micropost %>
+
+    <% if logged_in? && micropost.user_id == current_user.id %>
       <%= link_to 'delete', micropost, data: {
-           turbo_method: :delete,
-           turbo_confirm: 'Are you sure you want to delete this post?'
+        turbo_method: :delete,
+        turbo_confirm: 'Are you sure you want to delete this post?'
       } %>
-      <% unless trash_action %>
+
+      <% if action_name == 'trash' %>
+        <%= link_to 'restore', micropost, data: { turbo_method: :patch } %>
+      <% else %>
         <%= link_to micropost.pinned? ? 'unpin' : 'pin',
                     toggle_pinned_micropost_path(micropost),
                     data: { turbo_method: :patch } %>

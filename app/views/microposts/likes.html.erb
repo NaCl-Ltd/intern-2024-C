@@ -1,0 +1,10 @@
+<div class='row'>
+  <div class='col-md-8'>
+    <h3>Microposts you liked</h3>
+    <% if @microposts.any? %>
+      <ol class='microposts'>
+        <%= render @microposts %>
+      </ol>
+    <% end %>
+  </div>
+</div>
