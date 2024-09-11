@@ -1,11 +1,13 @@
 <% provide(:title, @user.name) %>
+h1{
+  background-color: "#EEEEEE";
+}
 <div class="row">
   <aside class="col-md-4">
     <section>
       <h1>
         <%= gravatar_for @user %>
-        <strong><%= @user.name %></strong>
-        <p><%= @user.introduction %></p>
+        <%= @user.name %>
       </h1>
     </section>
     <section class="stats">
@@ -14,12 +16,12 @@
   </aside>
   <div class="col-md-8">
     <%= render 'follow_form' if logged_in? %>
-    <% if @microposts.any? %>
-      <h3>Microposts (<%= @microposts.count %>)</h3>
+    <% if @user.microposts.any? %>
+      <h3>Microposts (<%= @user.microposts.order(created_at: :desc).count %>)</h3>
       <ol class="microposts">
         <%= render @microposts %>
       </ol>
-      <%= link_to "show all", show_all_user_path(@user), class: 'btn btn-primary' %>
     <% end %>
   </div>
 </div>
+

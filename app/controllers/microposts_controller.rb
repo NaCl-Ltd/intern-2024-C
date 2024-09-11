@@ -3,13 +3,18 @@ class MicropostsController < ApplicationController
   before_action :set_micropost, only: %i[update destroy toggle_pinned like unlike]
   before_action :require_author, only: %i[update destroy toggle_pinned]
 
+  def index
+    @micropost  = current_user.microposts.build
+    @feed_items = current_user.feed.order(created_at: :desc)
+  end
+
   def create
     @micropost = current_user.microposts.build(micropost_params)
     if @micropost.save
       flash[:success] = "Micropost created!"
       redirect_to root_url
     else
-      @feed_items = current_user.feed.paginate(page: params[:page])
+      @feed_items = current_user.feed.order(created_at: :desc).limit(10) 
       render 'static_pages/home', status: :unprocessable_entity
     end
   end

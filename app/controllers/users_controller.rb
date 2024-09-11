@@ -12,9 +12,9 @@ class UsersController < ApplicationController
     @users = users.paginate(page: params[:page])
   end
 
-  def show
+  def show_all
     @user = User.find(params[:id])
-    @microposts = @user.microposts.kept.paginate(page: params[:page])
+    @microposts = @user.microposts.kept.order(created_at: :desc).limit(10)
   end
 
   def new
