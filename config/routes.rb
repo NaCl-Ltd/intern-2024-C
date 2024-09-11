@@ -12,15 +12,14 @@ Rails.application.routes.draw do
 
   resources :users do
     member do
-      get :following, :followers
-      get 'show_all'
+      get :following, :followers, :show_all
     end
   end
 
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
 
-  resources :microposts, only: %i[create update destroy] do
+  resources :microposts, only: %i[index show create update destroy] do
     collection do
       get :news, :trash, :likes
     end
@@ -31,8 +30,6 @@ Rails.application.routes.draw do
       delete :unlike
     end
   end
-
-  resources :microposts, only: [:index]
 
   resources :relationships,       only: [:create, :destroy]
   get '/microposts', to: 'static_pages#home'

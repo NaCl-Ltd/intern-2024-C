@@ -5,7 +5,10 @@
       <h1>
         <%= gravatar_for @user %>
         <strong><%= @user.name %></strong>
-        <p><%= @user.introduction %></p>
+        <p class="nickname"><%= @user.nickname %></p>
+        <p>
+          <b>introduction:</b> <%= @user.introduction %>
+        </p>
       </h1>
     </section>
     <section class="stats">

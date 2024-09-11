@@ -5,7 +5,11 @@
   </span>
 
   <span class='content'>
-    <%= raw Rinku.auto_link(micropost.content) %>
+    <%= raw linkify_nickname(
+              Rinku.auto_link(micropost.content),
+              @micropost_matching_nicknames,
+              user_path(@user || current_user)
+    ) %>
     <% if micropost.images.attached? %>
       <% micropost.images.each do |image| %>
         <%= image_tag image.variant(:display) %>

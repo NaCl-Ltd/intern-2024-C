@@ -6,7 +6,10 @@
     | <%= link_to "delete", user, data: { "turbo-method": :delete,
                                           turbo_confirm: "You sure?" } %>
   <% end %>
-  <p><%= user.introduction %></p> 
+  <p class="nickname"><%= user.nickname %></p>
+  <p>
+    <b>introduction:</b> <%= user.introduction %>
+  </p>
   <% if show_address %>
   <%= user.following.count %>
   フォロー

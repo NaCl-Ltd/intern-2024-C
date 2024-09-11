@@ -8,6 +8,15 @@ class MicropostsController < ApplicationController
     @feed_items = current_user.feed.order(created_at: :desc)
   end
 
+  def show
+    @micropost = Micropost.find(params[:id])
+    @users = User.all
+    @users_nickname = @users.pluck(:nickname)
+    @micropost_matching_nicknames = @users_nickname.select do |nickname|
+      Micropost.where("content LIKE ?", "%#{nickname}%").exists?
+    end
+  end
+
   def create
     @micropost = current_user.microposts.build(micropost_params)
     if @micropost.save

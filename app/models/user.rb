@@ -22,6 +22,8 @@ class User < ApplicationRecord
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
   validates :introduction, length: { maximum: 50 }
+  validates :nickname, presence: true, uniqueness: true,
+                       format: { with: /\A@[A-Za-z]+\z/, message: "must start with @ and contain only letters" }
   
   # 渡された文字列のハッシュ値を返す
   def User.digest(string)
