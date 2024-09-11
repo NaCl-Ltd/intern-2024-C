@@ -31,3 +31,10 @@
 
 en:
   hello: "Hello world"
+  Log in: "Log in"
+  email: "email"
+  password: "password"
+  forgot password: (forgot password)
+  remember_me: "Remember me on this computer"
+  New_user: "New user?"
+  Sign up now!: "Sign up now!"

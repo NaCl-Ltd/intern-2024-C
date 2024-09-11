@@ -8,6 +8,9 @@ class User < ApplicationRecord
                                    dependent:   :destroy
   has_many :following, through: :active_relationships,  source: :followed
   has_many :followers, through: :passive_relationships, source: :follower
+
+  has_many :likes, dependent: :destroy
+
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save   :downcase_email
   before_create :create_activation_digest
@@ -18,7 +21,8 @@ class User < ApplicationRecord
                     uniqueness: true
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
-
+  validates :introduction, length: { maximum: 50 }
+  
   # 渡された文字列のハッシュ値を返す
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
@@ -29,6 +33,13 @@ class User < ApplicationRecord
   # ランダムなトークンを返す
   def User.new_token
     SecureRandom.urlsafe_base64
+  end
+
+  def self.search_by(query)
+    return all if query.blank?
+
+    q = "%#{sanitize_sql_like(query)}%"
+    where('name LIKE ?', q).or(where('email LIKE ?', q))
   end
 
   # 永続セッションのためにユーザーをデータベースに記憶する
@@ -86,11 +97,9 @@ class User < ApplicationRecord
 
   # ユーザーのステータスフィードを返す
   def feed
-    following_ids = "SELECT followed_id FROM relationships
-                     WHERE  follower_id = :user_id"
-    Micropost.where("user_id IN (#{following_ids})
-                     OR user_id = :user_id", user_id: id)
-             .includes(:user, image_attachment: :blob)
+    Micropost.includes(:user, images_attachments: :blob)
+             .kept
+             .where(user_id: [*following_ids, id])
   end
 
   # ユーザーをフォローする
