@@ -1,5 +1,5 @@
 <%= turbo_frame_tag micropost do %>
-  <%= pluralize(micropost.likes_count, 'like') %>
+  <%= pluralize(micropost.likes.count, 'like') %>
 
   <% if logged_in? %>
     <% if micropost.likes.exists?(user_id: current_user.id) %>
