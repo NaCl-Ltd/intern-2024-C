@@ -30,7 +30,7 @@ class MicropostsController < ApplicationController
   end
 
   def news
-    @microposts = Micropost.includes(:user, image_attachment: :blob)
+    @microposts = Micropost.includes(:user, images_attachments: :blob)
                            .kept
                            .where(user_id: current_user.following_ids, created_at: 48.hours.ago..)
                            .reorder('created_at DESC')
@@ -38,13 +38,13 @@ class MicropostsController < ApplicationController
   end
 
   def trash
-    @microposts = Micropost.includes(:user, image_attachment: :blob)
+    @microposts = Micropost.includes(:user, images_attachments: :blob)
                            .discarded
                            .paginate(page: params[:page])
   end
 
   def likes
-    @microposts = Micropost.includes(:user, image_attachment: :blob)
+    @microposts = Micropost.includes(:user, images_attachments: :blob)
                            .kept
                            .where(id: current_user.likes.pluck(:likeable_id))
                            .paginate(page: params[:page])
