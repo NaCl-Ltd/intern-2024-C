@@ -7,6 +7,7 @@ class Micropost < ApplicationRecord
   end
 
   has_many :likes, as: :likeable, dependent: :destroy
+  has_and_belongs_to_many :tags
 
   default_scope -> { order(pinned: :desc, created_at: :desc) }
 
