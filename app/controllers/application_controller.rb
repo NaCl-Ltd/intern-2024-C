@@ -12,6 +12,6 @@ class ApplicationController < ActionController::Base
     return if logged_in?
 
     store_location
-    redirect_to login_path, flash: { danger: 'Login required' }
+    redirect_to login_path, status: :see_other, flash: { danger: 'Login required' }
   end
 end
