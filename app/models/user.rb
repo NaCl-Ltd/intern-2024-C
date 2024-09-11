@@ -97,7 +97,7 @@ class User < ApplicationRecord
 
   # ユーザーのステータスフィードを返す
   def feed
-    Micropost.includes(:user, image_attachment: :blob)
+    Micropost.includes(:user, images_attachments: :blob)
              .kept
              .where(user_id: [*following_ids, id])
   end

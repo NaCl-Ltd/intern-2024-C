@@ -6,7 +6,11 @@
 
   <span class='content'>
     <%= raw Rinku.auto_link(micropost.content) %>
-    <%= image_tag micropost.image.variant(:display) if micropost.image.attached? %>
+    <% if micropost.images.attached? %>
+      <% micropost.images.each do |image| %>
+        <%= image_tag image.variant(:display) %>
+      <% end %>
+    <% end %>
   </span>
 
   <span class='timestamp'>
