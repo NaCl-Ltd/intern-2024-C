@@ -1,10 +1,21 @@
 class MicropostsController < ApplicationController
-  before_action :logged_in_user, only: %i[create destroy news toggle_pinned]
+  before_action :logged_in_user, only: %i[show create destroy news toggle_pinned]
   before_action :correct_user, only: %i[destroy toggle_pinned]
+
+  def show
+    @micropost = Micropost.find(params[:id])
+    @users = User.all
+    @users_nickname = @users.pluck(:nickname)
+    @micropost_matching_nicknames = @users_nickname.select do |nickname|
+      MicroPost.where("content LIKE ?", "%#{nickname}%").exists?
+    end
+  end
+  
 
   def create
     @micropost = current_user.microposts.build(micropost_params)
     @micropost.image.attach(params[:micropost][:image])
+    
     if @micropost.save
       flash[:success] = "Micropost created!"
       redirect_to root_url
@@ -46,4 +57,6 @@ class MicropostsController < ApplicationController
       @micropost = current_user.microposts.find_by(id: params[:id])
       redirect_to root_url, status: :see_other if @micropost.nil?
     end
+
+   
 end

@@ -47,3 +47,6 @@ end
 # Windows ではタイムゾーン情報用の tzinfo-data gem を含める必要があります
 # gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "rinku"
+gem 'elasticsearch', '~> 8.5'
+gem 'elasticsearch-rails', '~> 8.0'
+gem 'elasticsearch-model', '~> 8.0'

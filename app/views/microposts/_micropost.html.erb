@@ -2,7 +2,9 @@
   <%= link_to gravatar_for(micropost.user, size: 50), micropost.user %>
   <span class="user"><%= link_to micropost.user.name, micropost.user %></span>
   <span class="content">
-    <%= raw Rinku.auto_link(micropost.content) %>
+ 
+    <%= raw linkify_nickname(Rinku.auto_link(micropost.content),@micropost_matching_nicknames,user_path(@user)) %>
+
     <% if micropost.image.attached? %>
       <%= image_tag micropost.image.variant(:display) %>
     <% end %>
