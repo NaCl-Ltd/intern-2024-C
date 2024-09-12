@@ -19,7 +19,7 @@ class Micropost < ApplicationRecord
                                       message:   "should be less than 5MB" }
   validate :images_limit
 
-  before_update :add_tags
+  before_update :add_tags, if: -> { content_changed? }
   after_create :add_tags
 
   after_save :ensure_single_pinned_post, if: -> { pinned? }
