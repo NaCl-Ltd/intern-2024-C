@@ -99,3 +99,10 @@ $ bin/rails db:seed
 
 - Email: example@railstutorial.org
 - Password: foobar
+
+### Schedule a daily task that empties the trash:
+```
+$ crontab -r
+$ bundle exec whenever --update-crontab --set environment=development
+$ crontab -l
+```

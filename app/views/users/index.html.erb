@@ -3,6 +3,10 @@
 
 <%= form_with url: users_path, method: :get do |f| %>
   <%= f.text_field :search_query %>
+  <%= f.select :birthplaces,
+               BIRTHPLACES.map { |p| [p.capitalize, p] },
+               {},
+               { multiple: true, size: 10 } %>
   <%= f.submit 'Search' %>
 <% end %>
 

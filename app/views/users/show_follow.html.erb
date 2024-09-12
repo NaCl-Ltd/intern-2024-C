@@ -7,7 +7,7 @@
       <p class="nickname"><%= @user.nickname %></p>
       <p><b>introduction:</b><%= @user.introduction %></p> 
       <span><%= link_to "view my profile", @user %></span>
-      <span><strong>Microposts:</strong> <%= @user.microposts.count %></span>
+      <span><strong>Microposts:</strong> <%= @user.microposts.kept.count %></span>
     </section>
     <section class="stats">
       <%= render 'shared/stats' %>
