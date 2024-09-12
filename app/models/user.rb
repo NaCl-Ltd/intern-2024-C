@@ -36,10 +36,12 @@ class User < ApplicationRecord
   end
 
   def self.search_by(query)
-    return all if query.blank?
-
-    q = "%#{sanitize_sql_like(query)}%"
-    where('name LIKE ?', q).or(where('email LIKE ?', q))
+    if query.blank?
+      all
+    else
+      q = "%#{sanitize_sql_like(query)}%"
+      where('name LIKE ?', q).or(where('email LIKE ?', q))
+    end
   end
 
   # 永続セッションのためにユーザーをデータベースに記憶する

@@ -1,4 +1,6 @@
 class MicropostsController < ApplicationController
+  NEWS_COUNT = 10
+
   before_action :require_user
   before_action :set_micropost, only: %i[update destroy toggle_pinned like unlike]
   before_action :require_author, only: %i[update destroy toggle_pinned]
@@ -34,7 +36,7 @@ class MicropostsController < ApplicationController
                            .kept
                            .where(user_id: current_user.following_ids, created_at: 48.hours.ago..)
                            .reorder('created_at DESC')
-                           .limit(Settings.news.count)
+                           .limit(NEWS_COUNT)
   end
 
   def trash
@@ -61,7 +63,7 @@ class MicropostsController < ApplicationController
 
   def toggle_pinned
     @micropost.toggle(:pinned).save!
-    redirect_to root_path, status: :see_other
+    redirect_to current_user, status: :see_other
   end
 
   def like

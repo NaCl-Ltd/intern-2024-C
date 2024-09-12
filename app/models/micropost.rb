@@ -19,10 +19,11 @@ class Micropost < ApplicationRecord
                                       message:   "should be less than 5MB" }
   validate :images_limit
 
-  before_update :add_tags, if: -> { content_changed? }
-  after_create :add_tags
+  after_save :tag, if: :saved_change_to_content?
 
-  after_save :ensure_single_pinned_post, if: -> { pinned? }
+  before_save -> { update_column(:pinned, false) },
+              if: -> { will_save_change_to_discarded_at?(from: nil) && pinned_in_database }
+  after_save :ensure_single_pinned_post, if: -> { saved_change_to_pinned?(from: false, to: true) }
 
   private
 
@@ -33,15 +34,13 @@ class Micropost < ApplicationRecord
   end
 
   def ensure_single_pinned_post
-    update!(pinned: false) if discarded?
-
     user.microposts.where(pinned: true).where.not(id: id).update_all(pinned: false)
   end
 
-  def add_tags
-    tags.clear
-    self.tags = content.scan(/#[^\s#]+/).uniq.map do |hashtag|
-      Tag.find_or_create_by!(name: hashtag.downcase[1..])
+  def tag
+    tags.clear unless tags.empty?
+    self.tags = content.scan(/(?<=#)[^\s#]+/).uniq.map do |ht|
+      Tag.find_or_create_by!(name: ht)
     end
   end
 end
