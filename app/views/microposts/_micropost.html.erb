@@ -5,7 +5,7 @@
   </span>
 
   <span class='content'>
-    <%= raw Rinku.auto_link(micropost.content) %>
+    <%= raw Rinku.auto_link(render_with_hashtags(micropost.content)) %>
     <% if micropost.images.attached? %>
       <% micropost.images.each do |image| %>
         <%= image_tag image.variant(:display) %>

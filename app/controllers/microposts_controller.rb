@@ -50,6 +50,15 @@ class MicropostsController < ApplicationController
                            .paginate(page: params[:page])
   end
 
+  def hashtag
+    return unless (tag = Tag.find_by(name: params[:name]))
+
+    @microposts = tag.microposts
+                     .includes(:user, images_attachments: :blob)
+                     .kept
+                     .paginate(page: params[:page])
+  end
+
   def toggle_pinned
     @micropost.toggle(:pinned).save!
     redirect_to root_path, status: :see_other

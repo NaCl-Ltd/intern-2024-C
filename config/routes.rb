@@ -32,6 +32,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/microposts/hashtag/:name' => 'microposts#hashtag'
+
   resources :microposts, only: [:index]
 
   resources :relationships,       only: [:create, :destroy]
