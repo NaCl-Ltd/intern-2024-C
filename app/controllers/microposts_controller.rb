@@ -38,9 +38,9 @@ class MicropostsController < ApplicationController
   end
 
   def trash
-    @microposts = Micropost.includes(:user, images_attachments: :blob)
-                           .discarded
-                           .paginate(page: params[:page])
+    microposts = Micropost.includes(:user, images_attachments: :blob).discarded
+    microposts = microposts.where(user_id: current_user.id) unless current_user.admin?
+    @microposts = microposts.paginate(page: params[:page])
   end
 
   def likes
@@ -48,6 +48,15 @@ class MicropostsController < ApplicationController
                            .kept
                            .where(id: current_user.likes.pluck(:likeable_id))
                            .paginate(page: params[:page])
+  end
+
+  def hashtag
+    return unless (tag = Tag.find_by(name: params[:name]))
+
+    @microposts = tag.microposts
+                     .includes(:user, images_attachments: :blob)
+                     .kept
+                     .paginate(page: params[:page])
   end
 
   def toggle_pinned

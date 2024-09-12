@@ -5,7 +5,7 @@
   </span>
 
   <span class='content'>
-    <%= raw Rinku.auto_link(micropost.content) %>
+    <%= raw Rinku.auto_link(render_with_hashtags(micropost.content)) %>
     <% if micropost.images.attached? %>
       <% micropost.images.each do |image| %>
         <%= image_tag image.variant(:display) %>
@@ -16,7 +16,7 @@
     <%= t("posted_time_ago", time: time_ago_in_words(micropost.created_at)) %>
     <%= render 'microposts/like_btn', micropost: micropost %>
 
-    <% if logged_in? && micropost.user_id == current_user.id %>
+    <% if logged_in? && (micropost.user_id == current_user.id || current_user.admin?) %>
       <%= link_to t('delete'), micropost, data: {
         turbo_method: :delete,
         turbo_confirm: 'Are you sure you want to delete this post?'
@@ -24,7 +24,7 @@
 
       <% if action_name == 'trash' %>
         <%= link_to 'restore', micropost, data: { turbo_method: :patch } %>
-      <% else %>
+      <% elsif micropost.user_id == current_user.id %>
         <%= link_to micropost.pinned? ? t('unpin') : t('pin'),
                     toggle_pinned_micropost_path(micropost),
                     data: { turbo_method: :patch } %>

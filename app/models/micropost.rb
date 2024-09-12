@@ -7,6 +7,7 @@ class Micropost < ApplicationRecord
   end
 
   has_many :likes, as: :likeable, dependent: :destroy
+  has_and_belongs_to_many :tags
 
   default_scope -> { order(pinned: :desc, created_at: :desc) }
 
@@ -17,6 +18,9 @@ class Micropost < ApplicationRecord
                       size:         { less_than: 5.megabytes,
                                       message:   "should be less than 5MB" }
   validate :images_limit
+
+  before_update :add_tags, if: -> { content_changed? }
+  after_create :add_tags
 
   after_save :ensure_single_pinned_post, if: -> { pinned? }
 
@@ -32,5 +36,12 @@ class Micropost < ApplicationRecord
     update!(pinned: false) if discarded?
 
     user.microposts.where(pinned: true).where.not(id: id).update_all(pinned: false)
+  end
+
+  def add_tags
+    tags.clear
+    self.tags = content.scan(/#[^\s#]+/).uniq.map do |hashtag|
+      Tag.find_or_create_by!(name: hashtag.downcase[1..])
+    end
   end
 end
