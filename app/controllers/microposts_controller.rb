@@ -1,17 +1,7 @@
 class MicropostsController < ApplicationController
-  before_action :logged_in_user, only: %i[show create destroy news toggle_pinned]
+  before_action :logged_in_user, only: %i[create destroy news toggle_pinned]
   before_action :correct_user, only: %i[destroy toggle_pinned]
-
-  def show
-    @micropost = Micropost.find(params[:id])
-    @users = User.all
-    @users_nickname = @users.pluck(:nickname)
-    @micropost_matching_nicknames = @users_nickname.select do |nickname|
-      MicroPost.where("content LIKE ?", "%#{nickname}%").exists?
-    end
-  end
   
-
   def create
     @micropost = current_user.microposts.build(micropost_params)
     @micropost.image.attach(params[:micropost][:image])
@@ -40,6 +30,14 @@ class MicropostsController < ApplicationController
                            .where(user_id: current_user.following_ids, created_at: 48.hours.ago..)
                            .reorder('created_at DESC')
                            .limit(Settings.news.count)
+                           
+    
+    @users = User.all
+    @users_nicknames_and_urls = @users.each_with_object({}) do |user, hash|
+      hash[user.nickname] = user_path(user)
+    end
+
+    
   end
 
   def toggle_pinned

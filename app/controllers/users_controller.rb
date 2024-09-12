@@ -10,6 +10,14 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @microposts = @user.microposts.paginate(page: params[:page])
+    
+    @users = User.all
+    @users_nicknames_and_urls = @users.each_with_object({}) do |user, hash|
+      hash[user.nickname] = user_path(user)
+    end
+
+
+    
   end
 
   def new

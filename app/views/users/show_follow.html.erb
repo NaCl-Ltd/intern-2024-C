@@ -1,9 +1,11 @@
 <% provide(:title, @title) %>
 <div class="row">
-  <aside class="col-md-4">
+  <aside class="col-md-4 infomation">
     <section class="user_info">
       <%= gravatar_for @user %>
       <h1><%= @user.name %></h1>
+      <p class="nickname"><%= @user.nickname %></p>
+      <p><b>introduction:</b><%= @user.introduction %></p> 
       <span><%= link_to "view my profile", @user %></span>
       <span><strong>Microposts:</strong> <%= @user.microposts.count %></span>
     </section>
@@ -22,7 +24,7 @@
     <h3><%= @title %></h3>
     <% if @users.any? %>
       <ul class="users follow">
-        <%= render @users %>
+        <%= render @users , user: @user, show_address: true %>
       </ul>
       <%= will_paginate %>
     <% end %>

@@ -3,8 +3,8 @@
   <span class="user"><%= link_to micropost.user.name, micropost.user %></span>
   <span class="content">
  
-    <%= raw linkify_nickname(Rinku.auto_link(micropost.content),@micropost_matching_nicknames,user_path(@user)) %>
-
+    <%= raw linkify_nickname(Rinku.auto_link(micropost.content),@users_nicknames_and_urls) %>
+    
     <% if micropost.image.attached? %>
       <%= image_tag micropost.image.variant(:display) %>
     <% end %>
