@@ -13,7 +13,7 @@
     <% end %>
   </span>
   <span class='timestamp'>
-    <%= "#{t('Posted')} #{time_ago_in_words(micropost.created_at)} #{t('ago')}" %>
+    <%= t("posted_time_ago", time: time_ago_in_words(micropost.created_at)) %>
     <%= render 'microposts/like_btn', micropost: micropost %>
 
     <% if logged_in? && micropost.user_id == current_user.id %>
